@@ -11,7 +11,7 @@ password: 111111
 
 Click the link - TBA
 
-![my-todosit-clone](./client/public/images/todoist-screenshot.png)
+![my-todosit-clone](./public/images/todoist-screenshot.png)
 
 ## Technologies
 
