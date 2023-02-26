@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const StyledLabel = styled.label`
@@ -7,7 +8,12 @@ const StyledLabel = styled.label`
   margin: 5px 0;
 `;
 
-const Label = ({ children, htmlFor }) => {
+interface LabelProps {
+  children: ReactNode;
+  htmlFor: string;
+}
+
+const Label = ({ children, htmlFor }: LabelProps) => {
   return <StyledLabel htmlFor={htmlFor}>{children}</StyledLabel>;
 };
 
