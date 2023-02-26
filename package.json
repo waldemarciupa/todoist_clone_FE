@@ -24,6 +24,7 @@
     "web-vitals": "^1.1.2"
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.26",
     "cypress": "^9.4.1"
   },
   "scripts": {
