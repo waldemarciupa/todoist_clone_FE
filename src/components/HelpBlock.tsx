@@ -13,7 +13,11 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const HelpBlock = ({ register }) => {
+interface HelpBlockProps {
+  register: boolean;
+}
+
+const HelpBlock = ({ register }: HelpBlockProps) => {
   return (
     <StyledBlock>
       {register ? (
