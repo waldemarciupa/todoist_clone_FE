@@ -1,6 +1,20 @@
+import { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
-const StyledInput = styled.input`
+interface StyledInputProps {
+  mb: string;
+}
+
+interface InputProps {
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  type: string;
+  id: string;
+  name: string;
+  mb: string;
+  value: string;
+}
+
+const StyledInput = styled.input<StyledInputProps>`
   display: block;
   width: 100%;
   font-size: 13px;
@@ -11,7 +25,7 @@ const StyledInput = styled.input`
   border-radius: 5px;
 `;
 
-const Input = ({ onChange, type, id, name, mb, value }) => {
+const Input = ({ onChange, type, id, name, mb, value }: InputProps) => {
   return (
     <StyledInput
       onChange={onChange}
