@@ -1,6 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { MouseEventHandler } from 'react';
 
 const Button = styled.button`
   width: 100%;
@@ -39,7 +39,12 @@ const Span = styled.span`
   height: 17px;
 `;
 
-const ButtonAddTask = ({ onClick, title }) => {
+interface ButtonAddTaskProps {
+  onClick: MouseEventHandler<HTMLButtonElement>;
+  title: string;
+}
+
+const ButtonAddTask = ({ onClick, title }: ButtonAddTaskProps) => {
   return (
     <Button onClick={onClick}>
       <StyledDiv>
