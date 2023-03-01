@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -24,7 +24,11 @@ const Paragraph = styled.p`
   margin: 8px 0;
 `;
 
-const EmptyState = ({ children }) => {
+interface EmptyStateProps {
+  children: ReactNode;
+}
+
+const EmptyState = ({ children }: EmptyStateProps) => {
   return (
     <Wrapper>
       <Content>{children}</Content>
