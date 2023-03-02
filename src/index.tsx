@@ -1,6 +1,5 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-// @ts-ignore TODO: DELETE
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 // @ts-ignore TODO: DELETE
