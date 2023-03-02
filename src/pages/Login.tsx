@@ -19,14 +19,14 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     dispatch(login({ email, password }))
       .unwrap()
       .then(() => {
         navigate('/');
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error(error);
       });
   };
