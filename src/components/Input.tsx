@@ -1,20 +1,16 @@
 import { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 
-interface StyledInputProps {
-  mb: string;
-}
-
 interface InputProps {
   onChange: ChangeEventHandler<HTMLInputElement>;
   type: string;
   id: string;
   name: string;
-  mb: string;
+  mb?: string;
   value: string;
 }
 
-const StyledInput = styled.input<StyledInputProps>`
+const StyledInput = styled.input<InputProps>`
   display: block;
   width: 100%;
   font-size: 13px;

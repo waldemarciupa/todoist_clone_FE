@@ -14,7 +14,7 @@ const StyledLink = styled(Link)`
 `;
 
 interface HelpBlockProps {
-  register: boolean;
+  register?: boolean;
 }
 
 const HelpBlock = ({ register }: HelpBlockProps) => {
