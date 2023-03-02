@@ -1,6 +1,12 @@
+import { MouseEventHandler, ReactNode } from 'react';
 import styled from 'styled-components';
 
-const StyledButton = styled.button`
+interface StyledButtonProps {
+  width: string;
+  primary: boolean;
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
   cursor: pointer;
   text-align: center;
   display: block;
@@ -21,7 +27,23 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ clickHandler, children, primary, type, title, width }) => {
+interface ButtonProps {
+  clickHandler: MouseEventHandler<HTMLButtonElement>;
+  children: ReactNode;
+  primary: boolean;
+  type: 'button' | 'submit' | 'reset' | undefined;
+  title: string;
+  width: string;
+}
+
+const Button = ({
+  clickHandler,
+  children,
+  primary,
+  type,
+  title,
+  width,
+}: ButtonProps) => {
   return (
     <StyledButton
       title={title}
