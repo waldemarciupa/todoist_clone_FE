@@ -1,12 +1,11 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// @ts-ignore TODO: DELETE
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 
 const container = document.getElementById('app');
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 root.render(
   <Provider store={store}>
