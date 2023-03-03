@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import api from '../../services/api';
+import axios from 'axios';
 
 const user: string | null = localStorage.getItem('user');
 
@@ -16,7 +17,7 @@ const initialState: UserState = user
 
 export const login = createAsyncThunk(
   'auth/login',
-  async (payload, thunkAPI) => {
+  async (payload: { email: string; password: string }, thunkAPI) => {
     try {
       const { data } = await api.post(`/auth/login`, {
         email: payload.email,
@@ -27,14 +28,19 @@ export const login = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data.message);
+      }
     }
   }
 );
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (payload, thunkAPI) => {
+  async (
+    payload: { name: string; email: string; password: string },
+    thunkAPI
+  ) => {
     try {
       const { data } = await api.post(`/auth/register`, {
         name: payload.name,
@@ -46,7 +52,9 @@ export const register = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data.message);
+      }
     }
   }
 );
