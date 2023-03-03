@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../features/User/userSlice';
 import { StyledLogin, LoginForm } from '../components/styles/Login.styled';
 import Input from '../components/Input';
@@ -9,15 +8,16 @@ import Button from '../components/Button';
 import Error from '../components/Error';
 import HelpBlock from '../components/HelpBlock';
 import Disclaimer from '../components/Disclaimer';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const error = useSelector((state) => state.user.error);
+  const error = useAppSelector((state) => state.user.error);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
