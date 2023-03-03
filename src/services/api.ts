@@ -9,9 +9,9 @@ const api = axios.create({
 
 // Set the AUTH token for any request
 api.interceptors.request.use(function (config) {
-  const user = JSON.parse(localStorage.getItem('user'));
-  config.headers.user = user ? user.token : '';
-  config.headers.user_id = user ? user.id : '';
+  const user: string | null = localStorage.getItem('user');
+  config.headers.user = user ? JSON.parse(user).token : '';
+  config.headers.user_id = user ? JSON.parse(user).id : '';
   return config;
 });
 
