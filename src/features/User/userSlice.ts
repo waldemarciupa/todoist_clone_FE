@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 import api from '../../services/api';
 
-const user = JSON.parse(localStorage.getItem('user'));
+const user: string | null = localStorage.getItem('user');
 
 interface UserState {
   isLoggedIn: boolean;
   data: string | null;
-  error: null;
+  error: null | unknown;
 }
 
 const initialState: UserState = user
-  ? { isLoggedIn: true, data: user, error: null }
-  : { isLoggedIn: false, data: null, error: null };
+  ? { isLoggedIn: true, data: JSON.parse(user), error: null }
+  : { isLoggedIn: false, data: user, error: null };
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -57,11 +58,12 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  extraReducers(builder) {
+  reducers: {},
+  extraReducers: (builder) => {
     builder.addCase(register.fulfilled, (state, action) => {
       state.data = action.payload;
       state.isLoggedIn = true;
-      state.error = '';
+      state.error = null;
     });
     builder.addCase(register.rejected, (state, action) => {
       state.error = action.payload;
@@ -69,12 +71,12 @@ export const userSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.data = action.payload;
       state.isLoggedIn = true;
-      state.error = '';
+      state.error = null;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.error = action.payload;
     });
-    builder.addCase(logout.fulfilled, (state, action) => {
+    builder.addCase(logout.fulfilled, (state) => {
       state.isLoggedIn = false;
       state.data = null;
     });
@@ -83,4 +85,4 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const userSelector = (state) => state.user;
+export const userSelector = (state: RootState) => state.user;
