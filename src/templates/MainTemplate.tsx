@@ -64,7 +64,7 @@ const MainTemplate = () => {
     size > 768 && setIsAsideVisible(true);
   }, [size]);
 
-  const filterHandler = (query) => {
+  const filterHandler = (query: string) => {
     if (query) {
       dispatch(selectTasks(query));
       dispatch(setProjectSingle(query));
