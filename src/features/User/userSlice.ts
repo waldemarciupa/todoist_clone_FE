@@ -3,7 +3,13 @@ import api from '../../services/api';
 
 const user = JSON.parse(localStorage.getItem('user'));
 
-const initialState = user
+interface UserState {
+  isLoggedIn: boolean;
+  data: string | null;
+  error: null;
+}
+
+const initialState: UserState = user
   ? { isLoggedIn: true, data: user, error: null }
   : { isLoggedIn: false, data: null, error: null };
 
