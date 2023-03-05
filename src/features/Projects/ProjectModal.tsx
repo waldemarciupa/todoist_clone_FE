@@ -1,3 +1,4 @@
+import { FormEventHandler, MouseEventHandler, ReactNode } from 'react';
 import styled from 'styled-components';
 import Button from '../../components/Button';
 
@@ -53,13 +54,21 @@ const ButtonsWrapper = styled.div`
   border-top: 1px solid #ddd;
 `;
 
+interface ModalProps {
+  onClick: MouseEventHandler<HTMLDivElement>;
+  title: string;
+  children: ReactNode;
+  handleSubmit: FormEventHandler<HTMLFormElement>;
+  hideProjectModal: MouseEventHandler<HTMLButtonElement>;
+}
+
 const Modal = ({
   onClick,
   title,
   children,
   handleSubmit,
   hideProjectModal,
-}) => {
+}: ModalProps) => {
   return (
     <ModalOuter onClick={onClick}>
       <ModalInner
