@@ -1,4 +1,4 @@
-export const ProjectColorList = [
+export const ProjectColorList: { title: string; color: string }[] = [
   {
     title: 'Berry Red',
     color: 'rgb(184, 37, 95)',
