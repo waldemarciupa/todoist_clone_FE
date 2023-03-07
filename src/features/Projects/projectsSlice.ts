@@ -1,7 +1,16 @@
 import api from '../../services/api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import { Project } from './types';
 
-const initialState = {
+interface ProjectsState {
+  single: string;
+  list: Project[];
+  status: string;
+  error: null;
+}
+
+const initialState: ProjectsState = {
   single: 'All tasks',
   list: [],
   status: 'idle',
@@ -10,7 +19,7 @@ const initialState = {
 
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
-  async (payload) => {
+  async () => {
     const { data } = await api.get('/projects');
     return data;
   }
@@ -26,7 +35,7 @@ export const addNewProject = createAsyncThunk(
 
 export const deleteProject = createAsyncThunk(
   'project/deleteProject',
-  async (payload) => {
+  async (payload: { id: string }) => {
     await api.delete(`/projects/${payload.id}`);
   }
 );
@@ -35,20 +44,16 @@ export const projectsSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
-    resetProjects: {
-      reducer(state) {
-        return (state = initialState);
-      },
+    resetProjects: () => {
+      return initialState;
     },
-    setProjectSingle: {
-      reducer(state, action) {
-        state.single = action.payload;
-      },
+    setProjectSingle: (state, action) => {
+      state.single = action.payload;
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchProjects.pending, (state, action) => {
+      .addCase(fetchProjects.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchProjects.fulfilled, (state, action) => {
@@ -70,4 +75,4 @@ export const { resetProjects, setProjectSingle } = projectsSlice.actions;
 
 export default projectsSlice.reducer;
 
-export const selectProjects = (state) => state.projects.list;
+export const selectProjects = (state: RootState) => state.projects.list;
