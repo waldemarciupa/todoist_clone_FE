@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { SetStateAction, useState } from 'react';
 import { addNewProject } from './projectsSlice';
 import styled, { css } from 'styled-components';
 import { ProjectColorList } from './ProjectColorList';
 import ProjectModal from './ProjectModal';
+import { useAppDispatch } from '../../app/hooks';
 
 const styles = css`
   width: 100%;
@@ -53,7 +53,11 @@ const ColoredDot = styled.span`
   margin: 0 auto;
 `;
 
-const ColorList = styled.ul`
+interface ColorListProps {
+  isOpen: boolean;
+}
+
+const ColorList = styled.ul<ColorListProps>`
   display: ${(props) => (props.isOpen ? 'block' : 'none')};
   position: absolute;
   height: 300px;
@@ -76,19 +80,23 @@ const Color = styled.li`
   }
 `;
 
-const ProjectCreate = ({ hideProjectModal }) => {
+interface ProjectCreateProps {
+  hideProjectModal: () => void;
+}
+
+const ProjectCreate = ({ hideProjectModal }: ProjectCreateProps) => {
   const [name, setName] = useState('');
-  const [title, setTitle] = useState('Charcoal');
-  const [color, setColor] = useState('rgb(128, 128, 128)');
+  const [title, setTitle] = useState<string | undefined>('Charcoal');
+  const [color, setColor] = useState<string | undefined>('rgb(128, 128, 128)');
   const [isOpen, setIsOpen] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { value: SetStateAction<string> } }) => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     dispatch(addNewProject({ name, title, color }));
     hideProjectModal();

@@ -27,7 +27,7 @@ export const fetchProjects = createAsyncThunk(
 
 export const addNewProject = createAsyncThunk(
   'projects/addNewProject',
-  async (payload) => {
+  async (payload: Project) => {
     const { data } = await api.post('/projects', payload);
     return data;
   }
