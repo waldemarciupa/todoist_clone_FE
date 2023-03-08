@@ -2,10 +2,22 @@ import { useDispatch } from 'react-redux';
 import { deleteProject } from './projectsSlice';
 import ProjectModal from './ProjectModal';
 
-const ProjectDelete = ({ id, name, hideModal, filterHandler }) => {
+interface ProjectDeleteProps {
+  id: string;
+  name: string;
+  hideModal: () => void;
+  filterHandler: () => void;
+}
+
+const ProjectDelete = ({
+  id,
+  name,
+  hideModal,
+  filterHandler,
+}: ProjectDeleteProps) => {
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     dispatch(deleteProject({ id }));
     hideModal();
