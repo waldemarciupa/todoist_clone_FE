@@ -1,8 +1,18 @@
 import api from '../../services/api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import {
+  CommentPayload,
+  CompleteSubtaskPayload,
+  EditTaskPayload,
+  TaskId,
+  TaskPayload,
+  TasksState,
+  TaskUnderscoreId,
+} from './types';
 
-const initialState = {
-  error: null,
+const initialState: TasksState = {
+  error: undefined,
   message: [],
   project: 'All tasks',
   status: 'idle',
@@ -13,17 +23,14 @@ const initialState = {
   tasksBySearch: [],
 };
 
-export const fetchTasks = createAsyncThunk(
-  'tasks/fetchTasks',
-  async (payload) => {
-    const { data } = await api.get('/tasks');
-    return data;
-  }
-);
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
+  const { data } = await api.get('/tasks');
+  return data;
+});
 
 export const fetchTaskSingle = createAsyncThunk(
   'tasks/fetchTaskSingle',
-  async (payload) => {
+  async (payload: TaskId) => {
     const { data } = await api.get(`/task/${payload.id}`);
     return data;
   }
@@ -31,25 +38,28 @@ export const fetchTaskSingle = createAsyncThunk(
 
 export const addNewTask = createAsyncThunk(
   'tasks/addNewTask',
-  async (payload) => {
+  async (payload: TaskPayload) => {
     const response = await api.post('/tasks', payload);
     return response.data;
   }
 );
 
-export const editTask = createAsyncThunk('tasks/editTask', async (payload) => {
-  const response = await api.put(`/task/${payload.id}`, {
-    title: payload.title,
-    description: payload.description,
-    id: payload.id,
-    completed: payload.completed,
-  });
-  return response.data;
-});
+export const editTask = createAsyncThunk(
+  'tasks/editTask',
+  async (payload: EditTaskPayload) => {
+    const response = await api.put(`/task/${payload.id}`, {
+      title: payload.title,
+      description: payload.description,
+      id: payload.id,
+      completed: payload.completed,
+    });
+    return response.data;
+  }
+);
 
 export const deleteTask = createAsyncThunk(
   'task/deleteTask',
-  async (payload) => {
+  async (payload: TaskUnderscoreId) => {
     const response = await api.delete(`/task/${payload.task_id}`);
     return response.data;
   }
@@ -57,7 +67,7 @@ export const deleteTask = createAsyncThunk(
 
 export const addNewSubtask = createAsyncThunk(
   'tasks/addNewSubtask',
-  async (payload) => {
+  async (payload: TaskPayload) => {
     const response = await api.post(`/task/${payload.id}/subtask`, {
       title: payload.title,
       description: payload.description,
@@ -70,7 +80,7 @@ export const addNewSubtask = createAsyncThunk(
 
 export const completeSubtask = createAsyncThunk(
   'tasks/completeSubtask',
-  async (payload) => {
+  async (payload: CompleteSubtaskPayload) => {
     const response = await api.put(`/task/${payload.id}/subtask`, {
       subtask_id: payload.subtask_id,
       subtask_completed: payload.completed,
@@ -81,7 +91,7 @@ export const completeSubtask = createAsyncThunk(
 
 export const deleteSubtask = createAsyncThunk(
   'tasks/deleteSubtask',
-  async (payload) => {
+  async (payload: CompleteSubtaskPayload) => {
     const response = await api.post(`/task/${payload.id}/subtask-delete`, {
       subtask_id: payload.subtask_id,
     });
@@ -91,7 +101,9 @@ export const deleteSubtask = createAsyncThunk(
 
 export const addNewComment = createAsyncThunk(
   'tasks/addNewComment',
-  async (payload) => {
+  async (payload: CommentPayload) => {
+    console.log('payload', payload);
+
     const response = await api.post(`/task/${payload.id}/comment`, {
       content: payload.comment,
     });
@@ -101,7 +113,9 @@ export const addNewComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   'tasks/deleteComment',
-  async (payload) => {
+  async (payload: CommentPayload) => {
+    console.log('payload', payload);
+
     const response = await api.post(`/task/${payload.id}/comment-delete`, {
       comment_id: payload.comment_id,
     });
@@ -113,47 +127,35 @@ export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    selectTaskSingle: {
-      reducer(state, action) {
-        state.statusSingle = 'succeeded';
-        state.task = state.tasks.filter((task) => {
-          return task._id === action.payload;
-        })[0];
-      },
+    selectTaskSingle: (state, action) => {
+      state.statusSingle = 'succeeded';
+      state.task = state.tasks.filter((task) => {
+        return task._id === action.payload;
+      })[0];
     },
-    selectTasks: {
-      reducer(state, action) {
-        state.tasksByProject = state.tasks.filter((task) => {
-          return action.payload ? task.project === action.payload : true;
-        });
-      },
+    selectTasks: (state, action) => {
+      state.tasksByProject = state.tasks.filter((task) => {
+        return action.payload ? task.project === action.payload : true;
+      });
     },
-    selectTaskBySearch: {
-      reducer(state, action) {
-        state.tasksBySearch = state.tasks.filter((task) => {
-          return task.title.includes(action.payload);
-        });
-      },
+    selectTaskBySearch: (state, action) => {
+      state.tasksBySearch = state.tasks.filter((task) => {
+        return task.title.includes(action.payload);
+      });
     },
-    resetTasks: {
-      reducer(state, action) {
-        return (state = initialState);
-      },
+    resetTasks: () => {
+      return initialState;
     },
-    resetTaskMessage: {
-      reducer(state, action) {
-        state.message = [];
-      },
+    resetTaskMessage: (state) => {
+      state.message = [];
     },
-    setTaskProject: {
-      reducer(state, action) {
-        state.project = action.payload;
-      },
+    setTaskProject: (state, action) => {
+      state.project = action.payload;
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchTasks.pending, (state, action) => {
+      .addCase(fetchTasks.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
@@ -165,14 +167,14 @@ export const tasksSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
-      .addCase(fetchTaskSingle.pending, (state, action) => {
+      .addCase(fetchTaskSingle.pending, (state) => {
         state.statusSingle = 'loading';
       })
       .addCase(fetchTaskSingle.fulfilled, (state, action) => {
         state.statusSingle = 'succeeded';
         state.task = action.payload;
       })
-      .addCase(fetchTaskSingle.rejected, (state, action) => {
+      .addCase(fetchTaskSingle.rejected, (state) => {
         state.statusSingle = 'failed';
         state.error = 'There is no task with specific ID';
       })
@@ -291,5 +293,6 @@ export const {
 
 export default tasksSlice.reducer;
 
-export const selectTasksByProject = (state) => state.tasks.tasksByProject;
-export const taskSingle = (state) => state.tasks.task;
+export const selectTasksByProject = (state: RootState) =>
+  state.tasks.tasksByProject;
+export const taskSingle = (state: RootState) => state.tasks.task;

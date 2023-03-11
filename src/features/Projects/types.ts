@@ -1,6 +1,6 @@
 export interface Project {
   name: string;
-  title: string | undefined;
-  color: string | undefined;
+  title: string;
+  color: string;
   _id?: string;
 }
