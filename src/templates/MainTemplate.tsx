@@ -31,8 +31,8 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChevronDown } from 'react-icons/bs';
 
 const MainTemplate = () => {
-  const [name, setName] = useState(null);
-  const [id, setId] = useState(null);
+  const [name, setName] = useState<string>('');
+  const [id, setId] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isProjectDeleteModalVisible, setIsProjectDeleteModalVisible] =
     useState(false);
@@ -80,7 +80,7 @@ const MainTemplate = () => {
     navigate('/task');
   };
 
-  const setStateToDelete = (id, name) => {
+  const setStateToDelete = (id: string, name: string) => {
     setId(id);
     setName(name);
   };

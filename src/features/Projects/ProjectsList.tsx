@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { fetchProjects, selectProjects } from './projectsSlice';
 import {
   ListItem,
@@ -14,6 +13,7 @@ import {
 } from '../../components/styles/Home.styled';
 import { AiOutlineEllipsis, AiOutlineDelete } from 'react-icons/ai';
 import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 const Message = styled.li`
   list-style: none;
@@ -22,18 +22,24 @@ const Message = styled.li`
   padding: 4px 0 4px 16px;
 `;
 
+interface ProjectsListProps {
+  filterHandler: (query: string) => void;
+  toggleProjectDeleteModal: () => void;
+  setStateToDelete: (id: string, name: string) => void;
+}
+
 const ProjectsList = ({
   filterHandler,
   toggleProjectDeleteModal,
   setStateToDelete,
-}) => {
-  const dispatch = useDispatch();
-  const projects = useSelector(selectProjects);
-  const projectsStatus = useSelector((state) => state.projects.status);
-  const tasks = useSelector((state) => state.tasks.tasks);
+}: ProjectsListProps) => {
+  const dispatch = useAppDispatch();
+  const projects = useAppSelector(selectProjects);
+  const projectsStatus = useAppSelector((state) => state.projects.status);
+  const tasks = useAppSelector((state) => state.tasks.tasks);
 
   const tasksNumber = useCallback(
-    (project) => {
+    (project: Project) => {
       const number = tasks.filter((task) => {
         return task.project === project;
       }).length;
@@ -46,7 +52,7 @@ const ProjectsList = ({
   const ref = useRef(null);
   const [open, setOpen] = useState('');
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event: { target: any }) => {
     if (ref.current && !ref.current.contains(event.target)) {
       setOpen('');
     }
@@ -96,7 +102,7 @@ const ProjectsList = ({
                   <ListMenu ref={ref} open={open}>
                     <MenuItem
                       data-id={project._id}
-                      onClick={(e) => {
+                      onClick={(e: { stopPropagation: () => void }) => {
                         e.stopPropagation();
                         setOpen('');
                         toggleProjectDeleteModal();
