@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { selectTaskSingle } from './tasksSlice';
 import { AiOutlineDelete, AiOutlineCheck } from 'react-icons/ai';
 import {
@@ -20,6 +19,17 @@ import {
 } from '../../components/styles/Home.styled';
 import Branch from '../../components/icons/Branch';
 import Comment from '../../components/icons/Comment';
+import { useAppDispatch } from '../../app/hooks';
+
+import { TaskItem } from './types';
+
+interface TaskItemProps {
+  task: TaskItem;
+  deleteTaskHandler: string;
+  task_id: string;
+  subtask_id: string;
+  dispatchAction: any;
+}
 
 const TaskItem = ({
   task,
@@ -27,8 +37,8 @@ const TaskItem = ({
   task_id,
   subtask_id,
   dispatchAction,
-}) => {
-  const dispatch = useDispatch();
+}: TaskItemProps) => {
+  const dispatch = useAppDispatch();
 
   return (
     <Task data-id={task._id} subtask_id={subtask_id}>
