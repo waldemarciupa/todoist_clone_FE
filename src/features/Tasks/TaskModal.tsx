@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
+import { MouseEventHandler, ReactNode } from 'react';
 
 const ModalOuter = styled.div`
   position: fixed;
@@ -22,7 +22,12 @@ const ModalInner = styled.div`
   margin: 0 32px;
 `;
 
-const TaskModal = ({ hideModal, children }) => {
+interface TaskModalProps {
+  hideModal: MouseEventHandler<HTMLDivElement>;
+  children: ReactNode;
+}
+
+const TaskModal = ({ hideModal, children }: TaskModalProps) => {
   return (
     <ModalOuter onClick={hideModal}>
       <ModalInner
