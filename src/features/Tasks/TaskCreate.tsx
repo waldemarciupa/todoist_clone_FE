@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { ChangeEvent, MouseEventHandler, useEffect, useState } from 'react';
 import { selectProjects } from '../Projects/projectsSlice';
 import { resetTaskMessage } from './tasksSlice';
 import styled from 'styled-components';
 import Button from '../../components/Button';
 import { Input } from '../../components/styles/TaskSingle.styled';
 import { AiOutlineFundProjectionScreen, AiOutlineFlag } from 'react-icons/ai';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
-const TaskContent = styled.div`
+interface TaskContentProps {
+  modal: boolean;
+}
+
+const TaskContent = styled.div<TaskContentProps>`
   padding: ${(props) => (props.modal ? '16px 16px 0' : '10px')};
   border: ${(props) => (props.modal ? 'none' : '1px solid #ddd')};
   margin-top: ${(props) => (props.modal ? 'none' : '4px')};
@@ -51,12 +55,20 @@ const ActionButton = styled.button`
   }
 `;
 
-const ProjectList = styled.ul`
+interface ProjectListProps {
+  visible: boolean;
+}
+
+const ProjectList = styled.ul<ProjectListProps>`
   left: 0;
   display: ${(props) => (props.visible ? 'block' : 'none')};
 `;
 
-const PriorityList = styled.ul`
+interface PriorityListProps {
+  visible: boolean;
+}
+
+const PriorityList = styled.ul<PriorityListProps>`
   right: 0;
   display: ${(props) => (props.visible ? 'block' : 'none')};
 `;
@@ -79,13 +91,26 @@ const FlagIcon = styled(AiOutlineFlag)`
   color: ${(props) => props.color};
 `;
 
+// interface ButtonsWrapperProps {
+//   modal: boolean;
+// }
+
 const ButtonsWrapper = styled.div`
   display: grid;
   grid-template-columns: 100px 100px 1fr;
   grid-gap: 10px;
   padding: 16px;
-  border-top: ${(props) => (props.modal ? '1px solid #ddd' : 'none')};
+  // border-top: ${(props) => (props.modal ? '1px solid #ddd' : 'none')};
 `;
+
+interface TaskCreateProps {
+  isModal: boolean;
+  hideModal: any;
+  handleCancel: any;
+  action: any;
+  id: string;
+  subtask: string;
+}
 
 const TaskCreate = ({
   isModal,
@@ -94,13 +119,13 @@ const TaskCreate = ({
   action,
   id,
   subtask,
-}) => {
+}: TaskCreateProps) => {
   const [isProjectVisible, setIsProjectVisible] = useState(false);
   const [isPriorityVisible, setIsPriorityVisible] = useState(false);
 
-  const dispatch = useDispatch();
-  const projects = useSelector(selectProjects);
-  const projectSingle = useSelector((state) => state.projects.single);
+  const dispatch = useAppDispatch();
+  const projects = useAppSelector(selectProjects);
+  const projectSingle = useAppSelector((state) => state.projects.single);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -111,17 +136,17 @@ const TaskCreate = ({
     setProject(projectSingle === 'All tasks' ? 'Today' : projectSingle);
   }, [projectSingle]);
 
-  const handleProject = (event) => {
+  const handleProject = (event: MouseEventHandler<HTMLLIElement>) => {
     setProject(event.target.innerText);
     setIsProjectVisible(false);
   };
 
-  const handlePriority = (event) => {
+  const handlePriority = (event: MouseEventHandler<HTMLLIElement>) => {
     setPriority(event.target.innerText);
     setIsPriorityVisible(false);
   };
 
-  const taskCreate = async (event) => {
+  const taskCreate = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     dispatch(
       action({
@@ -150,13 +175,17 @@ const TaskCreate = ({
           primary
           placeholder='e.g., Family lunch on Sunday at 11am'
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setTitle(event.target.value)
+          }
         />
         <Input
           required
           placeholder='Description'
           value={description}
-          onChange={(event) => setDescription(event.target.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setDescription(event.target.value)
+          }
         />
         <Actions>
           {subtask ? (

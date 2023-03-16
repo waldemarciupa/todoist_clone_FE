@@ -55,15 +55,16 @@ import {
 import Note from '../../components/icons/Note';
 import TaskItem from './TaskItem';
 import Attachment from '../../components/icons/Attachment';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 const TaskSingle = () => {
   const params = useParams();
-  const dispatch = useDispatch();
-  const task = useSelector(taskSingle);
-  const projects = useSelector(selectProjects);
-  const taskStatus = useSelector((state) => state.tasks.statusSingle);
-  const error = useSelector((state) => state.tasks.error);
-  const user = useSelector((state) => state.user.data.name);
+  const dispatch = useAppDispatch();
+  const task = useAppSelector(taskSingle);
+  const projects = useAppSelector(selectProjects);
+  const taskStatus = useAppSelector((state) => state.tasks.statusSingle);
+  const error = useAppSelector((state) => state.tasks.error);
+  const user = useAppSelector((state) => state?.user?.data);
 
   const [id] = useState(params.id);
   const [title, setTitle] = useState('');
