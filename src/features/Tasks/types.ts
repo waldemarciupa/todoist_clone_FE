@@ -1,4 +1,4 @@
-export interface TaskItem {
+export interface TaskType {
   _id: string;
   title: string;
   description: string;
@@ -6,7 +6,7 @@ export interface TaskItem {
   priority: string;
   user: string;
   completed: boolean;
-  subtasks: TaskItem[];
+  subtasks: TaskType[];
   comments: string[];
   createdAt: string;
   updatedAt: string;
@@ -19,10 +19,10 @@ export interface TasksState {
   project: string;
   status: string;
   statusSingle: string;
-  task: TaskItem | null;
-  tasks: TaskItem[];
-  tasksByProject: TaskItem[];
-  tasksBySearch: TaskItem[];
+  task: TaskType | null;
+  tasks: TaskType[];
+  tasksByProject: TaskType[];
+  tasksBySearch: TaskType[];
 }
 
 export interface TaskPayload {

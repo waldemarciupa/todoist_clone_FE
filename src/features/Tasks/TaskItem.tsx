@@ -21,13 +21,15 @@ import Branch from '../../components/icons/Branch';
 import Comment from '../../components/icons/Comment';
 import { useAppDispatch } from '../../app/hooks';
 
-import { TaskItem } from './types';
+import { TaskType } from './types';
 
 interface TaskItemProps {
-  task: TaskItem;
-  deleteTaskHandler: string;
+  task: TaskType;
+  deleteTaskHandler: (e: {
+    target: { parentElement: { dataset: { id: any } } };
+  }) => void;
   task_id: string;
-  subtask_id: string;
+  subtask_id?: string;
   dispatchAction: any;
 }
 
