@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,11 +12,16 @@ import NotFound from './pages/NotFound';
 import TasksList from './features/Tasks/TasksList';
 import TaskSingle from './features/Tasks/TaskSingle';
 import GlobalStyle from './components/styles/Global';
-import { useSelector } from 'react-redux';
+import { ReactElement } from 'react';
+import { useAppSelector } from './app/hooks';
 
-function RequireAuth({ children }) {
-  let location = useLocation();
-  const auth = useSelector((state) => state.user.isLoggedIn);
+interface RequireAuthProps {
+  children: ReactElement;
+}
+
+function RequireAuth({ children }: RequireAuthProps) {
+  const location = useLocation();
+  const auth = useAppSelector((state) => state.user.isLoggedIn);
 
   if (!auth) {
     return <Navigate to='/users/login' state={{ from: location }} replace />;
