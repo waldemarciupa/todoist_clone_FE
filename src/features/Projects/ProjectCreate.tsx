@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, SyntheticEvent, useState } from 'react';
 import { addNewProject } from './projectsSlice';
 import styled, { css } from 'styled-components';
 import { ProjectColorList } from './ProjectColorList';
@@ -86,8 +86,8 @@ interface ProjectCreateProps {
 
 const ProjectCreate = ({ hideProjectModal }: ProjectCreateProps) => {
   const [name, setName] = useState('');
-  const [title, setTitle] = useState<string | undefined>('Charcoal');
-  const [color, setColor] = useState<string | undefined>('rgb(128, 128, 128)');
+  const [title, setTitle] = useState<string>('Charcoal');
+  const [color, setColor] = useState<string>('rgb(128, 128, 128)');
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -96,7 +96,7 @@ const ProjectCreate = ({ hideProjectModal }: ProjectCreateProps) => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(addNewProject({ name, title, color }));
     hideProjectModal();
@@ -130,9 +130,17 @@ const ProjectCreate = ({ hideProjectModal }: ProjectCreateProps) => {
               <Color
                 data-color={el.color}
                 data-title={el.title}
-                onClick={(e) => {
-                  setTitle(e.currentTarget.dataset.title);
-                  setColor(e.currentTarget.dataset.color);
+                onClick={(
+                  event: React.MouseEvent<HTMLLIElement, MouseEvent>
+                ) => {
+                  if (event.currentTarget.dataset.title) {
+                    setTitle(event.currentTarget.dataset.title);
+                  }
+
+                  if (event.currentTarget.dataset.color) {
+                    setColor(event.currentTarget.dataset.color);
+                  }
+
                   setIsOpen(false);
                 }}
                 key={el.title}
