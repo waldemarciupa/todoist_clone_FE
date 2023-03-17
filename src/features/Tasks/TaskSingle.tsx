@@ -165,238 +165,237 @@ const TaskSingle = () => {
     11: 'December',
   };
 
-  if (taskStatus === 'idle' || taskStatus === 'loading') {
-    return <StyledTaskSingle>Loading...</StyledTaskSingle>;
-  }
-
-  if (taskStatus === 'failed') {
-    return <StyledTaskSingle>{error}</StyledTaskSingle>;
-  }
-
-  if (taskStatus === 'succeeded') {
-    return (
-      <StyledTaskSingle>
-        <FlexLine>
-          <ProjectColorWrapper>
-            <ProjectColor color={projectColor} />
-          </ProjectColorWrapper>
-          <Project>{task.project}</Project>
-        </FlexLine>
-        <form onSubmit={saveTask}>
-          <Task isEditingMode={isEditingMode}>
-            <FlexLine>
-              <ButtonWrapper isEditingMode={isEditingMode}>
-                <TaskButton
-                  type='button'
-                  onClick={() => {
-                    setCompleted(!completed);
-                    dispatch(
-                      editTask({
-                        title,
-                        description,
-                        id,
-                        completed: !completed,
-                      })
-                    );
-                  }}
-                >
-                  <TaskButtonOuter completed={completed} color={task.priority}>
-                    <TaskButtonInner
+  return (
+    <StyledTaskSingle>
+      {(taskStatus === 'idle' || taskStatus === 'loading') && 'Loading...'}
+      {taskStatus === 'failed' && error}
+      {taskStatus === 'succeeded' && (
+        <>
+          <FlexLine>
+            <ProjectColorWrapper>
+              <ProjectColor color={projectColor} />
+            </ProjectColorWrapper>
+            <Project>{task.project}</Project>
+          </FlexLine>
+          <form onSubmit={saveTask}>
+            <Task isEditingMode={isEditingMode}>
+              <FlexLine>
+                <ButtonWrapper isEditingMode={isEditingMode}>
+                  <TaskButton
+                    type='button'
+                    onClick={() => {
+                      setCompleted(!completed);
+                      dispatch(
+                        editTask({
+                          title,
+                          description,
+                          id,
+                          completed: !completed,
+                        })
+                      );
+                    }}
+                  >
+                    <TaskButtonOuter
                       completed={completed}
                       color={task.priority}
                     >
-                      <AiOutlineCheck
-                        style={{
-                          width: '9px',
-                          height: '9px',
-                        }}
-                      />
-                    </TaskButtonInner>
-                  </TaskButtonOuter>
-                </TaskButton>
-              </ButtonWrapper>
-              <TaskTitle
+                      <TaskButtonInner
+                        completed={completed}
+                        color={task.priority}
+                      >
+                        <AiOutlineCheck
+                          style={{
+                            width: '9px',
+                            height: '9px',
+                          }}
+                        />
+                      </TaskButtonInner>
+                    </TaskButtonOuter>
+                  </TaskButton>
+                </ButtonWrapper>
+                <TaskTitle
+                  completed={completed}
+                  contentEditable={isEditingMode}
+                  suppressContentEditableWarning={true}
+                  isEditingMode={isEditingMode}
+                  onClick={(e) => {
+                    startEdition();
+                  }}
+                  onBlur={(e) => {
+                    setTitle(e.target.innerText + ' ');
+                  }}
+                >
+                  {title}
+                </TaskTitle>
+              </FlexLine>
+              <TaskDescription
                 completed={completed}
                 contentEditable={isEditingMode}
-                suppressContentEditableWarning={true}
                 isEditingMode={isEditingMode}
-                onClick={(e) => {
+                suppressContentEditableWarning={true}
+                onClick={() => {
                   startEdition();
                 }}
                 onBlur={(e) => {
-                  setTitle(e.target.innerText + ' ');
+                  setDescription(e.target.innerText + ' ');
                 }}
               >
-                {title}
-              </TaskTitle>
-            </FlexLine>
-            <TaskDescription
-              completed={completed}
-              contentEditable={isEditingMode}
-              isEditingMode={isEditingMode}
-              suppressContentEditableWarning={true}
-              onClick={() => {
-                startEdition();
-              }}
-              onBlur={(e) => {
-                setDescription(e.target.innerText + ' ');
-              }}
-            >
-              {description}
-            </TaskDescription>
-          </Task>
-          <FormButtonWrapper isEditingMode={isEditingMode}>
-            <Button primary type='submit'>
-              Save
-            </Button>
-            <Button type='button' clickHandler={finishEdition}>
-              Cancel
-            </Button>
-          </FormButtonWrapper>
-        </form>
-        <TaskDetails>
-          <ButtonsList>
-            <TabButton
-              value='tab1'
-              onClick={handleClick}
-              tabSelected={activeTab === 'tab1' && true}
-            >
-              Sub-tasks
-              <small> {subtasksNumber > 0 && subtasksNumber}</small>
-            </TabButton>
-            <TabButton
-              value='tab2'
-              onClick={handleClick}
-              tabSelected={activeTab === 'tab2' && true}
-            >
-              Comments
-              <small> {commentsNumber > 0 && commentsNumber}</small>
-            </TabButton>
-            <TabButton
-              value='tab3'
-              onClick={handleClick}
-              tabSelected={activeTab === 'tab3' && true}
-            >
-              Activity
-            </TabButton>
-          </ButtonsList>
-        </TaskDetails>
-        <TabsComponent>
-          {activeTab === 'tab1' && (
-            <SubtasksList>
-              {task.subtasks.length ? (
-                <ul>
-                  {task.subtasks.map((subtask) => {
-                    return (
-                      <TaskItem
-                        key={subtask._id}
-                        task={subtask}
-                        task_id={id}
-                        subtask_id={subtask._id}
-                        deleteTaskHandler={handleDeleteSubtask}
-                        dispatchAction={completeSubtask}
-                      />
-                    );
-                  })}
-                </ul>
-              ) : (
-                ''
-              )}
-              {addTaskVisible ? (
-                <TaskCreate
-                  subtask
-                  handleCancel={toggleAddTaskVisible}
-                  action={addNewSubtask}
-                  id={id}
-                />
-              ) : (
-                <ButtonAddTask
-                  onClick={toggleAddTaskVisible}
-                  title='Add sub-task'
-                />
-              )}
-            </SubtasksList>
-          )}
-          {activeTab === 'tab2' && (
-            <CommentsContainer>
-              {task.comments.length ? (
-                <>
-                  <CommentsList>
-                    {task.comments.map((comment) => {
+                {description}
+              </TaskDescription>
+            </Task>
+            <FormButtonWrapper isEditingMode={isEditingMode}>
+              <Button primary type='submit'>
+                Save
+              </Button>
+              <Button type='button' clickHandler={finishEdition}>
+                Cancel
+              </Button>
+            </FormButtonWrapper>
+          </form>
+          <TaskDetails>
+            <ButtonsList>
+              <TabButton
+                value='tab1'
+                onClick={handleClick}
+                tabSelected={activeTab === 'tab1' && true}
+              >
+                Sub-tasks
+                <small> {subtasksNumber > 0 && subtasksNumber}</small>
+              </TabButton>
+              <TabButton
+                value='tab2'
+                onClick={handleClick}
+                tabSelected={activeTab === 'tab2' && true}
+              >
+                Comments
+                <small> {commentsNumber > 0 && commentsNumber}</small>
+              </TabButton>
+              <TabButton
+                value='tab3'
+                onClick={handleClick}
+                tabSelected={activeTab === 'tab3' && true}
+              >
+                Activity
+              </TabButton>
+            </ButtonsList>
+          </TaskDetails>
+          <TabsComponent>
+            {activeTab === 'tab1' && (
+              <SubtasksList>
+                {task.subtasks.length ? (
+                  <ul>
+                    {task.subtasks.map((subtask) => {
                       return (
-                        <Comment key={comment._id}>
-                          <div>
-                            <CommentUser>{user}</CommentUser>
-                            <CommentDate>
-                              {new Date(comment.createdAt).getDate()}{' '}
-                              {months[new Date(comment.createdAt).getMonth()]}{' '}
-                              {new Date(comment.createdAt).getHours()}:
-                              {new Date(comment.createdAt).getMinutes()}
-                            </CommentDate>
-                          </div>
-                          <CommentContent>{comment.content}</CommentContent>
-                          <CommentDelete
-                            data-id={comment._id}
-                            title='Delete comment'
-                            onClick={handleDeleteComment}
-                          >
-                            <AiOutlineDelete
-                              style={{ width: '16px', height: '16px' }}
-                            />
-                          </CommentDelete>
-                        </Comment>
+                        <TaskItem
+                          key={subtask._id}
+                          task={subtask}
+                          task_id={id}
+                          subtask_id={subtask._id}
+                          deleteTaskHandler={handleDeleteSubtask}
+                          dispatchAction={completeSubtask}
+                        />
                       );
                     })}
-                  </CommentsList>
-                </>
-              ) : (
-                <>
-                  <Note />
-                  <StyledParagraph>
-                    Add relevant notes, links, files, photos, or anything else
-                    here.
-                  </StyledParagraph>
-                </>
-              )}
-              <WriteComment>
-                <form onSubmit={submitComment}>
-                  <Input
-                    required
-                    placeholder='Write a comment'
-                    value={comment}
-                    onChange={(event) => setComment(event.target.value)}
+                  </ul>
+                ) : (
+                  ''
+                )}
+                {addTaskVisible ? (
+                  <TaskCreate
+                    subtask
+                    handleCancel={toggleAddTaskVisible}
+                    action={addNewSubtask}
+                    id={id}
                   />
-                  <FlexLine style={{ justifyContent: 'space-between' }}>
-                    <AttachmentBtn htmlFor='file-upload' title='Attach file'>
-                      <Attachment />
-                    </AttachmentBtn>
-                    <input
-                      style={{ display: 'none' }}
-                      id='file-upload'
-                      type='file'
+                ) : (
+                  <ButtonAddTask
+                    onClick={toggleAddTaskVisible}
+                    title='Add sub-task'
+                  />
+                )}
+              </SubtasksList>
+            )}
+            {activeTab === 'tab2' && (
+              <CommentsContainer>
+                {task.comments.length ? (
+                  <>
+                    <CommentsList>
+                      {task.comments.map((comment) => {
+                        return (
+                          <Comment key={comment._id}>
+                            <div>
+                              <CommentUser>{user}</CommentUser>
+                              <CommentDate>
+                                {new Date(comment.createdAt).getDate()}{' '}
+                                {months[new Date(comment.createdAt).getMonth()]}{' '}
+                                {new Date(comment.createdAt).getHours()}:
+                                {new Date(comment.createdAt).getMinutes()}
+                              </CommentDate>
+                            </div>
+                            <CommentContent>{comment.content}</CommentContent>
+                            <CommentDelete
+                              data-id={comment._id}
+                              title='Delete comment'
+                              onClick={handleDeleteComment}
+                            >
+                              <AiOutlineDelete
+                                style={{ width: '16px', height: '16px' }}
+                              />
+                            </CommentDelete>
+                          </Comment>
+                        );
+                      })}
+                    </CommentsList>
+                  </>
+                ) : (
+                  <>
+                    <Note />
+                    <StyledParagraph>
+                      Add relevant notes, links, files, photos, or anything else
+                      here.
+                    </StyledParagraph>
+                  </>
+                )}
+                <WriteComment>
+                  <form onSubmit={submitComment}>
+                    <Input
+                      required
+                      placeholder='Write a comment'
+                      value={comment}
+                      onChange={(event) => setComment(event.target.value)}
                     />
-                    <Button primary type='submit' width={'100px'}>
-                      Comment
-                    </Button>
-                  </FlexLine>
-                </form>
-              </WriteComment>
-            </CommentsContainer>
-          )}
-          {activeTab === 'tab3' && (
-            <AddedOn>
-              Added on {new Date(task.createdAt).getDate()}{' '}
-              {months[new Date(task.createdAt).getMonth()]}{' '}
-              {new Date(task.createdAt).getFullYear()}
-              {', '}
-              {new Date(task.createdAt).getHours()}:
-              {new Date(task.createdAt).getMinutes()}
-            </AddedOn>
-          )}
-        </TabsComponent>
-      </StyledTaskSingle>
-    );
-  }
+                    <FlexLine style={{ justifyContent: 'space-between' }}>
+                      <AttachmentBtn htmlFor='file-upload' title='Attach file'>
+                        <Attachment />
+                      </AttachmentBtn>
+                      <input
+                        style={{ display: 'none' }}
+                        id='file-upload'
+                        type='file'
+                      />
+                      <Button primary type='submit' width={'100px'}>
+                        Comment
+                      </Button>
+                    </FlexLine>
+                  </form>
+                </WriteComment>
+              </CommentsContainer>
+            )}
+            {activeTab === 'tab3' && (
+              <AddedOn>
+                Added on {new Date(task.createdAt).getDate()}{' '}
+                {months[new Date(task.createdAt).getMonth()]}{' '}
+                {new Date(task.createdAt).getFullYear()}
+                {', '}
+                {new Date(task.createdAt).getHours()}:
+                {new Date(task.createdAt).getMinutes()}
+              </AddedOn>
+            )}
+          </TabsComponent>
+        </>
+      )}
+    </StyledTaskSingle>
+  );
 };
 
 export default TaskSingle;
