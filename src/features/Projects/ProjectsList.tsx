@@ -1,4 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  MutableRefObject,
+} from 'react';
 import { fetchProjects, selectProjects } from './projectsSlice';
 import {
   ListItem,
@@ -14,6 +20,7 @@ import {
 import { AiOutlineEllipsis, AiOutlineDelete } from 'react-icons/ai';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { ProjectInterface } from './types';
 
 const Message = styled.li`
   list-style: none;
@@ -38,8 +45,11 @@ const ProjectsList = ({
   const projectsStatus = useAppSelector((state) => state.projects.status);
   const tasks = useAppSelector((state) => state.tasks.tasks);
 
+  const ref: MutableRefObject<HTMLDivElement | null> = useRef(null);
+  const [open, setOpen] = useState('');
+
   const tasksNumber = useCallback(
-    (project: Project) => {
+    (project: ProjectInterface) => {
       const number = tasks.filter((task) => {
         return task.project === project;
       }).length;
@@ -49,26 +59,25 @@ const ProjectsList = ({
     [tasks]
   );
 
-  const ref = useRef(null);
-  const [open, setOpen] = useState('');
-
-  const handleClickOutside = (event: { target: any }) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
       setOpen('');
     }
   };
 
   useEffect(() => {
-    tasksNumber('Work');
+    tasksNumber({ name: 'Work' });
     if (projectsStatus === 'idle') {
       dispatch(fetchProjects());
     }
 
-    document.addEventListener('click', handleClickOutside, true);
+    if (open) {
+      document.addEventListener('click', handleClickOutside, true);
+    }
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  }, [dispatch, projects, projectsStatus, tasksNumber]);
+  }, [open, dispatch, projects, projectsStatus, tasksNumber]);
 
   return (
     <ul>
@@ -89,9 +98,13 @@ const ProjectsList = ({
                 </TaskCouter>
                 <ProjectDots
                   data-id={project._id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpen(e.currentTarget.dataset.id);
+                  onClick={(
+                    event: React.MouseEvent<HTMLLIElement, MouseEvent>
+                  ) => {
+                    event.stopPropagation();
+                    if (event.currentTarget.dataset.id) {
+                      setOpen(event.currentTarget.dataset.id);
+                    }
                   }}
                 >
                   <AiOutlineEllipsis

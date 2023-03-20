@@ -1,12 +1,14 @@
-export interface TaskType {
+import { ProjectInterface } from '../Projects/types';
+
+export interface TaskInterface {
   _id: string;
   title: string;
   description: string;
-  project: string;
+  project: ProjectInterface;
   priority: string;
   user: string;
   completed: boolean;
-  subtasks: TaskType[];
+  subtasks: TaskInterface[];
   comments: string[];
   createdAt: string;
   updatedAt: string;
@@ -19,10 +21,10 @@ export interface TasksState {
   project: string;
   status: string;
   statusSingle: string;
-  task: TaskType | null;
-  tasks: TaskType[];
-  tasksByProject: TaskType[];
-  tasksBySearch: TaskType[];
+  task: TaskInterface | null;
+  tasks: TaskInterface[];
+  tasksByProject: TaskInterface[];
+  tasksBySearch: TaskInterface[];
 }
 
 export interface TaskPayload {
