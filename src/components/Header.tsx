@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/User/userSlice';
 import {
   resetTasks,
@@ -31,14 +30,27 @@ import {
   AiOutlineSearch,
   AiOutlineClose,
 } from 'react-icons/ai';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
-const Header = ({ showModal, isAsideVisible, toggleAside, filterHandler }) => {
+interface HeaderProps {
+  showModal: () => void;
+  isAsideVisible: boolean;
+  toggleAside: React.MouseEventHandler<HTMLButtonElement>;
+  filterHandler: (query: string | null) => void;
+}
+
+const Header = ({
+  showModal,
+  isAsideVisible,
+  toggleAside,
+  filterHandler,
+}: HeaderProps) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchBoxVisible, setSearchsearchBoxVisible] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const searchTasks = useSelector((state) => state.tasks.tasksBySearch);
+  const dispatch = useAppDispatch();
+  const searchTasks = useAppSelector((state) => state.tasks.tasksBySearch);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -47,7 +59,7 @@ const Header = ({ showModal, isAsideVisible, toggleAside, filterHandler }) => {
     navigate('/users/login');
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
     dispatch(selectTaskBySearch(searchInput));
   };
@@ -65,7 +77,7 @@ const Header = ({ showModal, isAsideVisible, toggleAside, filterHandler }) => {
           title='Home'
           onClick={() => {
             navigate('/task');
-            filterHandler();
+            filterHandler(null);
           }}
         >
           <AiOutlineHome />
@@ -83,8 +95,9 @@ const Header = ({ showModal, isAsideVisible, toggleAside, filterHandler }) => {
             onFocus={() => {
               setSearchsearchBoxVisible(true);
             }}
-            onBlur={(e) => {
-              e.relatedTarget?.click();
+            onBlur={(event) => {
+              const el = event.relatedTarget as HTMLElement;
+              el.click();
               setSearchsearchBoxVisible(false);
               setSearchInput('');
             }}
@@ -106,7 +119,7 @@ const Header = ({ showModal, isAsideVisible, toggleAside, filterHandler }) => {
                   {task.title}
                   <TaskLinkBottom>
                     <Description>{task.description}</Description>
-                    <Project>{task.project}</Project>
+                    <Project>{task.project.name}</Project>
                   </TaskLinkBottom>
                 </TaskLink>
               ))

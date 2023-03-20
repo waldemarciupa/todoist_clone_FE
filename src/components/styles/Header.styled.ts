@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { FormEventHandler, ReactNode } from 'react';
 
 export const StyledHeader = styled.header`
   background: #db4c3f;
@@ -22,7 +23,7 @@ export const Control = styled.div`
 `;
 
 interface StyledButtonProps {
-  search: boolean;
+  search?: boolean;
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -44,7 +45,11 @@ export const StyledButton = styled.button<StyledButtonProps>`
   }
 `;
 
-export const SearchBar = styled.form`
+interface SearchBarProps {
+  onSubmit: (event: SubmitEvent) => void;
+}
+
+export const SearchBar = styled.form<SearchBarProps>`
   height: 28px;
   background: hsla(0, 0%, 100%, 0.2);
   border-radius: 3px;

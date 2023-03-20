@@ -34,8 +34,10 @@ const MainTemplate = () => {
   const [name, setName] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isProjectDeleteModalVisible, setIsProjectDeleteModalVisible] =
-    useState(false);
+  const [
+    isProjectDeleteModalVisible,
+    setIsProjectDeleteModalVisible,
+  ] = useState(false);
   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
   const [isAsideVisible, setIsAsideVisible] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
@@ -64,7 +66,7 @@ const MainTemplate = () => {
     size > 768 && setIsAsideVisible(true);
   }, [size]);
 
-  const filterHandler = (query: string) => {
+  const filterHandler = (query: string | null) => {
     if (query) {
       dispatch(selectTasks(query));
       dispatch(setProjectSingle(query));
