@@ -14,7 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const error = useAppSelector((state) => state.user.error);
+  const error = useAppSelector((state) => state.user.error) as string;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Login = () => {
       .then(() => {
         navigate('/');
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         console.error(error);
       });
   };

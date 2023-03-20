@@ -15,7 +15,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const error = useAppSelector((state) => state.user.error);
+  const error = useAppSelector((state) => state.user.error) as string;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
