@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const colors = {
-  'Priority 1': '209, 69, 59',
-  'Priority 2': '235, 137, 9',
-  'Priority 3': '36, 111, 224',
-  'Priority 4': '128,128,128',
-};
+enum colors {
+  'Priority 1' = '209, 69, 59',
+  'Priority 2' = '235, 137, 9',
+  'Priority 3' = '36, 111, 224',
+  'Priority 4' = '128,128,128',
+}
 
 const listItemStyles = css`
   height: 34px;
@@ -65,7 +65,11 @@ export const TasksList = styled.ul`
   list-style: none;
 `;
 
-export const Task = styled.li`
+interface TaskProps {
+  subtask_id: boolean;
+}
+
+export const Task = styled.li<TaskProps>`
   display: flex;
   padding: 10px 10px;
   border-bottom: 1px solid #f0f0f0;
@@ -83,7 +87,11 @@ export const Task = styled.li`
   }
 `;
 
-export const ButtonWrapper = styled.div`
+interface ButtonWrapperProps {
+  isEditingMode: boolean;
+}
+
+export const ButtonWrapper = styled.div<ButtonWrapperProps>`
   min-width: 26px;
   display: flex;
   justify-content: center;
@@ -101,21 +109,22 @@ export const TaskButton = styled.button`
   cursor: pointer;
 `;
 
-export const TaskButtonOuter = styled.div`
+interface ColorCompletedProps {
+  color: 'Priority 1' | 'Priority 2' | 'Priority 3' | 'Priority 4';
+  completed: boolean;
+}
+
+export const TaskButtonOuter = styled.div<ColorCompletedProps>`
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 1px solid rgb(${(props) => colors[props.color]});
-  background: ${(props) =>
-    props.completed
-      ? `rgb(${colors[props.color]})`
-      : `rgba(${colors[props.color]}, 0.1)`};
+  border: 1px solid rgb(${({ color }) => colors[color]});
+  background: ${({ color, completed }) =>
+    completed ? `rgb(${colors[color]})` : `rgba(${colors[color]}, 0.1)`};
 
   &:hover {
-    background: ${(props) =>
-      props.completed
-        ? `rgb(${colors[props.color]})`
-        : `rgba(${colors[props.color]}, 0.2)`};
+    background: ${({ color, completed }) =>
+      completed ? `rgb(${colors[color]})` : `rgba(${colors[color]}, 0.2)`};
 
     & > * {
       display: flex;
@@ -123,7 +132,7 @@ export const TaskButtonOuter = styled.div`
   }
 `;
 
-export const TaskButtonInner = styled.span`
+export const TaskButtonInner = styled.span<ColorCompletedProps>`
   display: ${(props) => (props.completed ? 'flex' : 'none')};
   color: ${(props) =>
     props.completed ? '#fff' : `rgb(${colors[props.color]})`};
@@ -144,7 +153,11 @@ export const TaskLink = styled(Link)`
 
 export const Subtask = styled.div``;
 
-export const TaskTitle = styled.p`
+interface TaskTitleProps {
+  completed: boolean;
+}
+
+export const TaskTitle = styled.p<TaskTitleProps>`
   color: ${(props) => (props.completed ? `#808080` : '#202020')};
   margin: 0;
   font-size: 14px;
@@ -225,7 +238,11 @@ export const Message = styled.div`
   border-radius: 4px;
 `;
 
-export const StyledAside = styled.div`
+interface StyledAsideProps {
+  isAsideVisible: boolean;
+}
+
+export const StyledAside = styled.div<StyledAsideProps>`
   height: calc(100vh - 44px);
   width: ${(props) => (props.isAsideVisible ? '300px' : '0')};
   min-width: ${(props) => (props.isAsideVisible ? '300px' : '0')};
@@ -244,7 +261,7 @@ export const StyledAside = styled.div`
   }
 `;
 
-export const Overlay = styled.div`
+export const Overlay = styled.div<StyledAsideProps>`
   @media (max-width: 767px) {
     position: fixed;
     width: 100%;
