@@ -27,7 +27,7 @@ const HelpBlock = ({ register }: HelpBlockProps) => {
         </p>
       ) : (
         <p>
-          Don't have an account?
+          Don&apos;t have an account?
           <StyledLink to='/users/register'> Sign up</StyledLink>
         </p>
       )}

@@ -35,7 +35,7 @@ const EmptyState = ({ children }: EmptyStateProps) => {
       <div>
         <Title>All clear</Title>
         <Paragraph>
-          Looks like everything's organized in the right place.
+          Looks like everything&apos;s organized in the right place.
         </Paragraph>
       </div>
     </Wrapper>
