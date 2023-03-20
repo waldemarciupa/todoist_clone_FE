@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+interface PriamryProps {
+  primary: boolean;
+}
+
+interface EditingProps {
+  isEditingMode: boolean;
+}
+
+interface CompletedProps extends EditingProps {
+  completed: boolean;
+}
+
 export const StyledTaskSingle = styled.div`
   height: calc(100vh - 44px);
   overflow-y: auto;
@@ -35,7 +47,7 @@ export const FlexLine = styled.div`
   gap: 6px;
 `;
 
-export const Task = styled.div`
+export const Task = styled.div<EditingProps>`
   margin-top: 5px;
   border-radius: 5px;
   cursor: text;
@@ -44,7 +56,7 @@ export const Task = styled.div`
     props.isEditingMode ? `1px solid #ddd` : '1px solid transparent'};
 `;
 
-export const TaskTitle = styled.div`
+export const TaskTitle = styled.div<CompletedProps>`
   width: 100%;
   font-size: ${(props) => (props.isEditingMode ? `14px` : '16px')};
   line-height: 26px;
@@ -54,7 +66,7 @@ export const TaskTitle = styled.div`
   color: ${(props) => (props.completed ? `#808080` : '#202020')};
 `;
 
-export const TaskDescription = styled.div`
+export const TaskDescription = styled.div<CompletedProps>`
   padding-left: ${(props) => (props.isEditingMode ? `0` : '32px')};
   margin-bottom: 16px;
   outline: none;
@@ -69,7 +81,11 @@ export const ButtonsList = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Button = styled.button`
+interface ButtonProps {
+  tabSelected: boolean;
+}
+
+export const Button = styled.button<ButtonProps>`
   width: 33.3%;
   display: block;
   padding: 10px 0;
@@ -93,7 +109,7 @@ export const AddedOn = styled.div`
   font-weight: 700;
 `;
 
-export const FormButtonWrapper = styled.div`
+export const FormButtonWrapper = styled.div<EditingProps>`
   display: ${(props) => (props.isEditingMode ? `grid` : 'none')};
   grid-template-columns: 100px 100px 1fr;
   grid-gap: 10px;
@@ -189,7 +205,7 @@ export const SubtasksList = styled.div`
   padding: 0 22px;
 `;
 
-export const Input = styled.textarea`
+export const Input = styled.textarea<PriamryProps>`
   width: 100%;
   font-size: 14px;
   line-height: 21px;
