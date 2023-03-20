@@ -21,7 +21,11 @@ export const Control = styled.div`
   gap: 10px;
 `;
 
-export const StyledButton = styled.button`
+interface StyledButtonProps {
+  search: boolean;
+}
+
+export const StyledButton = styled.button<StyledButtonProps>`
   position: ${(props) => (props.search ? 'absolute' : 'initial')};
   height: 28px;
   border: 0;
@@ -108,7 +112,11 @@ export const SearchClose = styled.button`
   }
 `;
 
-export const SearchBox = styled.div`
+interface SearchBoxProps {
+  visible: boolean;
+}
+
+export const SearchBox = styled.div<SearchBoxProps>`
   position: absolute;
   top: 32px;
   width: 406px;
