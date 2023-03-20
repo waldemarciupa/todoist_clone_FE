@@ -45,11 +45,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   }
 `;
 
-interface SearchBarProps {
-  onSubmit: (event: SubmitEvent) => void;
-}
-
-export const SearchBar = styled.form<SearchBarProps>`
+export const SearchBar = styled.form`
   height: 28px;
   background: hsla(0, 0%, 100%, 0.2);
   border-radius: 3px;

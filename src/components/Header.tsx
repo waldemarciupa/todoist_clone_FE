@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/User/userSlice';
 import {
@@ -31,6 +31,7 @@ import {
   AiOutlineClose,
 } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { TaskInterface } from '../features/Tasks/types';
 
 interface HeaderProps {
   showModal: () => void;
@@ -59,7 +60,7 @@ const Header = ({
     navigate('/users/login');
   };
 
-  const handleSubmit = (event: SubmitEvent) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(selectTaskBySearch(searchInput));
   };
@@ -108,7 +109,7 @@ const Header = ({
           </SearchClose>
           <SearchBox visible={searchBoxVisible}>
             {searchTasks.length > 0 ? (
-              searchTasks.map((task) => (
+              searchTasks.map((task: TaskInterface) => (
                 <TaskLink
                   to={`/task/${task._id}`}
                   onClick={() => {
