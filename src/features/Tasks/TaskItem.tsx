@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { selectTaskSingle } from './tasksSlice';
 import { AiOutlineDelete, AiOutlineCheck } from 'react-icons/ai';
 import {
@@ -25,9 +26,7 @@ import { ITask } from './types';
 
 interface TaskItemProps {
   task: ITask;
-  deleteTaskHandler: (e: {
-    target: { parentElement: { dataset: { id: any } } };
-  }) => void;
+  deleteTaskHandler: (e: MouseEvent) => void;
   task_id: string;
   subtask_id?: string;
   dispatchAction: any;
@@ -85,7 +84,7 @@ const TaskItem = ({
               <Container>
                 {task.subtasks && task.subtasks.length ? (
                   <BranchWrapper>
-                    <Branch width='16px' height='16px' />
+                    <Branch />
                     {task.subtasks.filter((task) => task.completed).length}/
                     {task.subtasks.length}
                   </BranchWrapper>
@@ -94,14 +93,14 @@ const TaskItem = ({
                 )}
                 {task.comments && task.comments.length ? (
                   <BranchWrapper>
-                    <Comment width='16px' height='16px' />
+                    <Comment />
                     {task.comments.length}
                   </BranchWrapper>
                 ) : (
                   ''
                 )}
               </Container>
-              <TaskProject>{task.project}</TaskProject>
+              <TaskProject>{task.project.name}</TaskProject>
             </TaskBottomWrapper>
           </TaskLink>
         )}

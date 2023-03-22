@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { TaskPriority } from '../../features/Tasks/types';
 
 enum colors {
   'Priority 1' = '209, 69, 59',
@@ -66,7 +67,7 @@ export const TasksList = styled.ul`
 `;
 
 interface TaskProps {
-  subtask_id: boolean;
+  subtask_id: string | undefined;
 }
 
 export const Task = styled.li<TaskProps>`
@@ -88,7 +89,7 @@ export const Task = styled.li<TaskProps>`
 `;
 
 interface ButtonWrapperProps {
-  isEditingMode: boolean;
+  isEditingMode?: boolean;
 }
 
 export const ButtonWrapper = styled.div<ButtonWrapperProps>`
@@ -110,7 +111,7 @@ export const TaskButton = styled.button`
 `;
 
 interface ColorCompletedProps {
-  color: 'Priority 1' | 'Priority 2' | 'Priority 3' | 'Priority 4';
+  color: TaskPriority;
   completed: boolean;
 }
 

@@ -5,7 +5,7 @@ export interface ITask {
   title: string;
   description: string;
   project: IProject;
-  priority: string;
+  priority: TaskPriority;
   user: string;
   completed: boolean;
   subtasks: ITask[];
@@ -14,6 +14,12 @@ export interface ITask {
   updatedAt: string;
   __v: number;
 }
+
+export type TaskPriority =
+  | 'Priority 1'
+  | 'Priority 2'
+  | 'Priority 3'
+  | 'Priority 4';
 
 export interface TasksState {
   error: string | undefined;
