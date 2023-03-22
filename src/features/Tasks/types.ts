@@ -1,10 +1,10 @@
-import { ProjectInterface } from '../Projects/types';
+import { IProject } from '../Projects/types';
 
 export interface TaskInterface {
   _id: string;
   title: string;
   description: string;
-  project: ProjectInterface;
+  project: IProject;
   priority: string;
   user: string;
   completed: boolean;

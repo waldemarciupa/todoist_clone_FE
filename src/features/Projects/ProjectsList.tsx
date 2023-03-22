@@ -20,7 +20,7 @@ import {
 import { AiOutlineEllipsis, AiOutlineDelete } from 'react-icons/ai';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { ProjectInterface } from './types';
+import { IProject } from './types';
 
 const Message = styled.li`
   list-style: none;
@@ -49,7 +49,7 @@ const ProjectsList = ({
   const [open, setOpen] = useState('');
 
   const tasksNumber = useCallback(
-    (project: ProjectInterface) => {
+    (project: IProject) => {
       const number = tasks.filter((task) => {
         return task.project === project;
       }).length;
@@ -103,7 +103,7 @@ const ProjectsList = ({
               <ProjectContent>
                 <Project>{project.name}</Project>
                 <TaskCouter className='task-counter'>
-                  {tasksNumber(project.name)}
+                  {tasksNumber({ name: project.name })}
                 </TaskCouter>
                 <ProjectDots data-id={project._id} onClick={handleClickOpen}>
                   <AiOutlineEllipsis
@@ -118,7 +118,9 @@ const ProjectsList = ({
                         e.stopPropagation();
                         setOpen('');
                         toggleProjectDeleteModal();
-                        setStateToDelete(project._id, project.name);
+                        if (project._id) {
+                          setStateToDelete(project._id, project.name);
+                        }
                       }}
                     >
                       <MenuItemDelete>

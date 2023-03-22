@@ -1,11 +1,11 @@
 import api from '../../services/api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { Project } from './types';
+import { IProject } from './types';
 
 interface ProjectsState {
   single: string;
-  list: Project[];
+  list: IProject[];
   status: string;
   error: null;
 }
@@ -27,7 +27,7 @@ export const fetchProjects = createAsyncThunk(
 
 export const addNewProject = createAsyncThunk(
   'projects/addNewProject',
-  async (payload: Project) => {
+  async (payload: IProject) => {
     const { data } = await api.post('/projects', payload);
     return data;
   }
