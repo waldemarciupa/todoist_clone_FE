@@ -31,7 +31,7 @@ import {
   AiOutlineClose,
 } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { TaskInterface } from '../features/Tasks/types';
+import { ITask } from '../features/Tasks/types';
 
 interface HeaderProps {
   showModal: () => void;
@@ -109,7 +109,7 @@ const Header = ({
           </SearchClose>
           <SearchBox visible={searchBoxVisible}>
             {searchTasks.length > 0 ? (
-              searchTasks.map((task: TaskInterface) => (
+              searchTasks.map((task: ITask) => (
                 <TaskLink
                   to={`/task/${task._id}`}
                   onClick={() => {
