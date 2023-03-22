@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface PriamryProps {
-  primary: boolean;
+  primary?: boolean;
 }
 
 interface EditingProps {

@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { selectProjects } from '../Projects/projectsSlice';
 import { resetTaskMessage } from './tasksSlice';
 import styled from 'styled-components';
@@ -37,7 +37,11 @@ const Actions = styled.div`
   }
 `;
 
-const ActionButton = styled.button`
+interface ActionButtonProps {
+  subtask?: boolean;
+}
+
+const ActionButton = styled.button<ActionButtonProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,16 +95,16 @@ const FlagIcon = styled(AiOutlineFlag)`
   color: ${(props) => props.color};
 `;
 
-// interface ButtonsWrapperProps {
-//   modal: boolean;
-// }
+interface ButtonsWrapperProps {
+  modal?: boolean;
+}
 
-const ButtonsWrapper = styled.div`
+const ButtonsWrapper = styled.div<ButtonsWrapperProps>`
   display: grid;
   grid-template-columns: 100px 100px 1fr;
   grid-gap: 10px;
   padding: 16px;
-  // border-top: ${(props) => (props.modal ? '1px solid #ddd' : 'none')};
+  border-top: ${(props) => (props.modal ? '1px solid #ddd' : 'none')};
 `;
 
 interface TaskCreateProps {
@@ -136,13 +140,13 @@ const TaskCreate = ({
     setProject(projectSingle === 'All tasks' ? 'Today' : projectSingle);
   }, [projectSingle]);
 
-  const handleProject = (event: MouseEventHandler<HTMLLIElement>) => {
-    setProject(event.target.innerText);
+  const handleProject = (event: MouseEvent<HTMLLIElement>) => {
+    setProject((event.target as HTMLElement).innerText);
     setIsProjectVisible(false);
   };
 
-  const handlePriority = (event: MouseEventHandler<HTMLLIElement>) => {
-    setPriority(event.target.innerText);
+  const handlePriority = (event: MouseEvent<HTMLLIElement>) => {
+    setPriority((event.target as HTMLElement).innerText);
     setIsPriorityVisible(false);
   };
 
@@ -175,17 +179,13 @@ const TaskCreate = ({
           primary
           placeholder='e.g., Family lunch on Sunday at 11am'
           value={title}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setTitle(event.target.value)
-          }
+          onChange={(event) => setTitle(event.target.value)}
         />
         <Input
           required
           placeholder='Description'
           value={description}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setDescription(event.target.value)
-          }
+          onChange={(event) => setDescription(event.target.value)}
         />
         <Actions>
           {subtask ? (
