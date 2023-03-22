@@ -59,6 +59,15 @@ const ProjectsList = ({
     [tasks]
   );
 
+  const handleClickOpen = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    if (event.currentTarget.dataset.id) {
+      setOpen(event.currentTarget.dataset.id);
+    }
+  };
+
   const handleClickOutside = (event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target as Node)) {
       setOpen('');
@@ -96,23 +105,13 @@ const ProjectsList = ({
                 <TaskCouter className='task-counter'>
                   {tasksNumber(project.name)}
                 </TaskCouter>
-                <ProjectDots
-                  data-id={project._id}
-                  onClick={(
-                    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-                  ) => {
-                    event.stopPropagation();
-                    if (event.currentTarget.dataset.id) {
-                      setOpen(event.currentTarget.dataset.id);
-                    }
-                  }}
-                >
+                <ProjectDots data-id={project._id} onClick={handleClickOpen}>
                   <AiOutlineEllipsis
                     style={{ width: '100%', height: '100%' }}
                   />
                 </ProjectDots>
                 {open === project._id && (
-                  <ListMenu ref={ref} open={open}>
+                  <ListMenu ref={ref}>
                     <MenuItem
                       data-id={project._id}
                       onClick={(e: { stopPropagation: () => void }) => {
