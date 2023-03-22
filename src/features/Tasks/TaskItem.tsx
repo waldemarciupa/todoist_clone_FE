@@ -21,10 +21,10 @@ import Branch from '../../components/icons/Branch';
 import Comment from '../../components/icons/Comment';
 import { useAppDispatch } from '../../app/hooks';
 
-import { TaskType } from './types';
+import { ITask } from './types';
 
 interface TaskItemProps {
-  task: TaskType;
+  task: ITask;
   deleteTaskHandler: (e: {
     target: { parentElement: { dataset: { id: any } } };
   }) => void;

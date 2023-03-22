@@ -1,6 +1,6 @@
 import { IProject } from '../Projects/types';
 
-export interface TaskInterface {
+export interface ITask {
   _id: string;
   title: string;
   description: string;
@@ -8,7 +8,7 @@ export interface TaskInterface {
   priority: string;
   user: string;
   completed: boolean;
-  subtasks: TaskInterface[];
+  subtasks: ITask[];
   comments: string[];
   createdAt: string;
   updatedAt: string;
@@ -21,10 +21,10 @@ export interface TasksState {
   project: string;
   status: string;
   statusSingle: string;
-  task: TaskInterface | null;
-  tasks: TaskInterface[];
-  tasksByProject: TaskInterface[];
-  tasksBySearch: TaskInterface[];
+  task: ITask | null;
+  tasks: ITask[];
+  tasksByProject: ITask[];
+  tasksBySearch: ITask[];
 }
 
 export interface TaskPayload {
