@@ -5,15 +5,22 @@ import axios from 'axios';
 
 const user: string | null = localStorage.getItem('user');
 
+interface User {
+  email: string;
+  id: string;
+  name: string;
+  token: string;
+}
+
 interface UserState {
   isLoggedIn: boolean;
-  data: string | null;
+  data: User | null;
   error: null | unknown;
 }
 
 const initialState: UserState = user
   ? { isLoggedIn: true, data: JSON.parse(user), error: null }
-  : { isLoggedIn: false, data: user, error: null };
+  : { isLoggedIn: false, data: null, error: null };
 
 export const login = createAsyncThunk(
   'auth/login',

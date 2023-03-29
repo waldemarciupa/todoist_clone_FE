@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   fetchTaskSingle,
   editTask,
@@ -56,6 +55,7 @@ import Note from '../../components/icons/Note';
 import TaskItem from './TaskItem';
 import Attachment from '../../components/icons/Attachment';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { TaskComment } from './types';
 
 const TaskSingle = () => {
   const params = useParams();
@@ -64,12 +64,12 @@ const TaskSingle = () => {
   const projects = useAppSelector(selectProjects);
   const taskStatus = useAppSelector((state) => state.tasks.statusSingle);
   const error = useAppSelector((state) => state.tasks.error);
-  const user = useAppSelector((state) => state?.user?.data);
+  const user = useAppSelector((state) => state?.user);
 
   const [id] = useState(params.id);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [completed, setCompleted] = useState('');
+  const [completed, setCompleted] = useState(false);
   const [addTaskVisible, setAddTaskVisible] = useState(false);
 
   const [projectColor, setProjectColor] = useState('rgb(5, 133, 39)');
@@ -83,20 +83,22 @@ const TaskSingle = () => {
 
   useEffect(() => {
     if (taskStatus === 'idle') {
-      dispatch(fetchTaskSingle({ id: params.id }));
+      dispatch(fetchTaskSingle({ id }));
     }
 
     if (taskStatus === 'succeeded') {
       const currentColor = projects.filter((project) => {
-        return project.name === task.project;
+        return project.name === task?.project;
       });
 
-      if (currentColor.length) {
+      if (currentColor.length && currentColor[0].color) {
         setProjectColor(currentColor[0].color);
       }
-      setTitle(task.title);
-      setDescription(task.description);
-      setCompleted(task.completed);
+      if (task) {
+        setTitle(task.title);
+        setDescription(task.description);
+        setCompleted(task.completed);
+      }
     }
   }, [dispatch, params.id, projects, task, taskStatus]);
 
@@ -106,64 +108,79 @@ const TaskSingle = () => {
     setIsEditingMode(true);
   };
 
-  const finishEdition = (e) => {
-    setIsEditingMode(false);
-    setTitle(task.title);
-    setDescription(task.description);
+  const finishEdition = () => {
+    if (task) {
+      setIsEditingMode(false);
+      setTitle(task.title);
+      setDescription(task.description);
+    }
   };
 
-  const saveTask = (e) => {
-    e.preventDefault();
-    dispatch(editTask({ title, description, id, completed }));
-    setIsEditingMode(false);
+  const saveTask = (event: { preventDefault: () => void }) => {
+    if (id) {
+      event.preventDefault();
+      dispatch(editTask({ title, description, id, completed }));
+      setIsEditingMode(false);
+    }
   };
 
-  const handleClick = (e) => {
-    setActiveTab(e.target.value);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveTab((event.target as HTMLButtonElement).value);
   };
 
   const toggleAddTaskVisible = () => {
     setAddTaskVisible(!addTaskVisible);
   };
 
-  const handleDeleteSubtask = (event) => {
+  const handleDeleteSubtask = (
+    event: React.MouseEvent<Element, MouseEvent>
+  ) => {
     dispatch(
       deleteSubtask({
         id,
-        subtask_id: event.currentTarget.dataset.subtask_id,
+        subtask_id:
+          event.currentTarget instanceof HTMLButtonElement
+            ? event.currentTarget.dataset.subtask_id
+            : '',
       })
     );
   };
 
-  const submitComment = (event) => {
+  const submitComment = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     dispatch(addNewComment({ id, comment }));
     setComment('');
   };
 
-  const handleDeleteComment = (event) => {
+  const handleDeleteComment = (
+    event: React.MouseEvent<Element, MouseEvent>
+  ) => {
     dispatch(
       deleteComment({
         id,
-        comment_id: event.currentTarget.dataset.id,
+        comment_id:
+          event.currentTarget instanceof HTMLButtonElement
+            ? event.currentTarget.dataset.id
+            : '',
+        comment: '',
       })
     );
   };
 
-  const months = {
-    0: 'January',
-    1: 'February',
-    2: 'March',
-    3: 'April',
-    4: 'May',
-    5: 'June',
-    6: 'July',
-    7: 'August',
-    8: 'September',
-    9: 'October',
-    10: 'November',
-    11: 'December',
-  };
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   return (
     <StyledTaskSingle>
@@ -175,7 +192,7 @@ const TaskSingle = () => {
             <ProjectColorWrapper>
               <ProjectColor color={projectColor} />
             </ProjectColorWrapper>
-            <Project>{task.project}</Project>
+            <Project>{task?.project}</Project>
           </FlexLine>
           <form onSubmit={saveTask}>
             <Task isEditingMode={isEditingMode}>
@@ -197,11 +214,11 @@ const TaskSingle = () => {
                   >
                     <TaskButtonOuter
                       completed={completed}
-                      color={task.priority}
+                      color={task ? task.priority : 'Priority 1'}
                     >
                       <TaskButtonInner
                         completed={completed}
-                        color={task.priority}
+                        color={task ? task.priority : 'Priority 1'}
                       >
                         <AiOutlineCheck
                           style={{
@@ -218,7 +235,7 @@ const TaskSingle = () => {
                   contentEditable={isEditingMode}
                   suppressContentEditableWarning={true}
                   isEditingMode={isEditingMode}
-                  onClick={(e) => {
+                  onClick={() => {
                     startEdition();
                   }}
                   onBlur={(e) => {
@@ -260,7 +277,7 @@ const TaskSingle = () => {
                 tabSelected={activeTab === 'tab1' && true}
               >
                 Sub-tasks
-                <small> {subtasksNumber > 0 && subtasksNumber}</small>
+                <small> {subtasksNumber && subtasksNumber > 0}</small>
               </TabButton>
               <TabButton
                 value='tab2'
@@ -268,7 +285,7 @@ const TaskSingle = () => {
                 tabSelected={activeTab === 'tab2' && true}
               >
                 Comments
-                <small> {commentsNumber > 0 && commentsNumber}</small>
+                <small> {commentsNumber && commentsNumber > 0}</small>
               </TabButton>
               <TabButton
                 value='tab3'
@@ -282,7 +299,7 @@ const TaskSingle = () => {
           <TabsComponent>
             {activeTab === 'tab1' && (
               <SubtasksList>
-                {task.subtasks.length ? (
+                {task?.subtasks.length ? (
                   <ul>
                     {task.subtasks.map((subtask) => {
                       return (
@@ -317,19 +334,23 @@ const TaskSingle = () => {
             )}
             {activeTab === 'tab2' && (
               <CommentsContainer>
-                {task.comments.length ? (
+                {task?.comments.length ? (
                   <>
                     <CommentsList>
-                      {task.comments.map((comment) => {
+                      {task.comments.map((comment: TaskComment) => {
+                        const createdDate = comment.createdAt;
+                        const date = new Date(createdDate).getDate();
+                        const month = new Date(createdDate).getMonth();
+                        const hours = new Date(createdDate).getHours();
+                        const minutes = new Date(createdDate).getMinutes();
+                        console.log(user);
+
                         return (
                           <Comment key={comment._id}>
                             <div>
-                              <CommentUser>{user}</CommentUser>
+                              <CommentUser>{user.data?.name}</CommentUser>
                               <CommentDate>
-                                {new Date(comment.createdAt).getDate()}{' '}
-                                {months[new Date(comment.createdAt).getMonth()]}{' '}
-                                {new Date(comment.createdAt).getHours()}:
-                                {new Date(comment.createdAt).getMinutes()}
+                                {date} {months[month]} {hours}:{minutes}
                               </CommentDate>
                             </div>
                             <CommentContent>{comment.content}</CommentContent>
@@ -381,7 +402,7 @@ const TaskSingle = () => {
                 </WriteComment>
               </CommentsContainer>
             )}
-            {activeTab === 'tab3' && (
+            {task && activeTab === 'tab3' && (
               <AddedOn>
                 Added on {new Date(task.createdAt).getDate()}{' '}
                 {months[new Date(task.createdAt).getMonth()]}{' '}

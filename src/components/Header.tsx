@@ -120,7 +120,7 @@ const Header = ({
                   {task.title}
                   <TaskLinkBottom>
                     <Description>{task.description}</Description>
-                    <Project>{task.project.name}</Project>
+                    <Project>{task.project}</Project>
                   </TaskLinkBottom>
                 </TaskLink>
               ))

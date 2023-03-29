@@ -27,7 +27,7 @@ import { ITask } from './types';
 interface TaskItemProps {
   task: ITask;
   deleteTaskHandler: (e: MouseEvent) => void;
-  task_id: string;
+  task_id: string | undefined;
   subtask_id?: string;
   dispatchAction: any;
 }

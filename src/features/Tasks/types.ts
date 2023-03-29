@@ -1,15 +1,15 @@
-import { IProject } from '../Projects/types';
+import { Key } from 'react';
 
 export interface ITask {
   _id: string;
   title: string;
   description: string;
-  project: IProject;
+  project: string;
   priority: TaskPriority;
   user: string;
   completed: boolean;
   subtasks: ITask[];
-  comments: string[];
+  comments: TaskComment[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -42,26 +42,32 @@ export interface TaskPayload {
 }
 
 export interface EditTaskPayload {
-  id: string;
+  id: string | undefined;
   title: string;
   description: string;
   completed: boolean;
 }
 
 export interface CompleteSubtaskPayload {
-  completed: boolean;
-  id: string;
-  subtask_id: string;
+  completed?: boolean;
+  id: string | undefined;
+  subtask_id: string | undefined;
+}
+
+export interface TaskComment {
+  _id: Key;
+  createdAt: string | number | Date;
+  content: string | number | boolean;
 }
 
 export interface CommentPayload {
   comment: string;
-  id: string;
-  comment_id: string;
+  id: string | undefined;
+  comment_id?: string;
 }
 
 export interface TaskId {
-  id: string;
+  id: string | undefined;
 }
 
 export interface TaskUnderscoreId {

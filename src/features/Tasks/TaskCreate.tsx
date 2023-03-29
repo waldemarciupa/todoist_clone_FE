@@ -108,12 +108,12 @@ const ButtonsWrapper = styled.div<ButtonsWrapperProps>`
 `;
 
 interface TaskCreateProps {
-  isModal: boolean;
-  hideModal: any;
+  isModal?: boolean;
+  hideModal?: any;
   handleCancel: any;
   action: any;
-  id: string;
-  subtask: string;
+  id: string | undefined;
+  subtask: boolean;
 }
 
 const TaskCreate = ({
