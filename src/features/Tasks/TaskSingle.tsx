@@ -132,16 +132,11 @@ const TaskSingle = () => {
     setAddTaskVisible(!addTaskVisible);
   };
 
-  const handleDeleteSubtask = (
-    event: React.MouseEvent<Element, MouseEvent>
-  ) => {
+  const handleDeleteSubtask = (task_id: string) => {
     dispatch(
       deleteSubtask({
         id,
-        subtask_id:
-          event.currentTarget instanceof HTMLButtonElement
-            ? event.currentTarget.dataset.subtask_id
-            : '',
+        subtask_id: task_id,
       })
     );
   };

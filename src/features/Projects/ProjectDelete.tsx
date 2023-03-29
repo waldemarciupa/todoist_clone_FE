@@ -6,7 +6,7 @@ interface ProjectDeleteProps {
   id: string;
   name: string;
   hideModal: () => void;
-  filterHandler: () => void;
+  filterHandler: (query: string | null) => void;
 }
 
 const ProjectDelete = ({
@@ -21,7 +21,7 @@ const ProjectDelete = ({
     e.preventDefault();
     dispatch(deleteProject({ id }));
     hideModal();
-    filterHandler();
+    filterHandler(null);
   };
 
   return (

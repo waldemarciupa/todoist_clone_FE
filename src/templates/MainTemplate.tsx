@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   addNewTask,
   selectTasks,
@@ -29,22 +28,21 @@ import {
 } from '../components/styles/Home.styled';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChevronDown } from 'react-icons/bs';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const MainTemplate = () => {
   const [name, setName] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [
-    isProjectDeleteModalVisible,
-    setIsProjectDeleteModalVisible,
-  ] = useState(false);
+  const [isProjectDeleteModalVisible, setIsProjectDeleteModalVisible] =
+    useState(false);
   const [isProjectModalVisible, setIsProjectModalVisible] = useState(false);
   const [isAsideVisible, setIsAsideVisible] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
 
-  const taskMessage = useSelector((state) => state.tasks.message);
+  const taskMessage = useAppSelector((state) => state.tasks.message);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const user = localStorage.getItem('user');
 
@@ -75,7 +73,7 @@ const MainTemplate = () => {
         toggleAside();
       }
     } else {
-      dispatch(selectTasks());
+      dispatch(selectTasks(null));
       dispatch(setProjectSingle('All tasks'));
       dispatch(setTaskProject('All tasks'));
     }
@@ -158,6 +156,8 @@ const MainTemplate = () => {
             hideModal={toggleModal}
             handleCancel={toggleModal}
             action={addNewTask}
+            id={undefined}
+            subtask={false}
           />
         </TaskModal>
       )}

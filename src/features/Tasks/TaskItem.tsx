@@ -26,7 +26,7 @@ import { ITask } from './types';
 
 interface TaskItemProps {
   task: ITask;
-  deleteTaskHandler: (e: MouseEvent) => void;
+  deleteTaskHandler: (task_id: string) => void;
   task_id: string | undefined;
   subtask_id?: string;
   dispatchAction: any;
@@ -100,7 +100,7 @@ const TaskItem = ({
                   ''
                 )}
               </Container>
-              <TaskProject>{task.project.name}</TaskProject>
+              <TaskProject>{task.project}</TaskProject>
             </TaskBottomWrapper>
           </TaskLink>
         )}
@@ -108,7 +108,7 @@ const TaskItem = ({
       <TaskActions
         data-subtask_id={subtask_id}
         title='Delete'
-        onClick={deleteTaskHandler}
+        onClick={() => deleteTaskHandler(task._id)}
       >
         <AiOutlineDelete style={{ color: '#202020' }} />
       </TaskActions>

@@ -8,7 +8,7 @@ import { AiOutlineFundProjectionScreen, AiOutlineFlag } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 interface TaskContentProps {
-  modal: boolean;
+  modal?: boolean;
 }
 
 const TaskContent = styled.div<TaskContentProps>`

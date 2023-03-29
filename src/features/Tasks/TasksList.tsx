@@ -38,10 +38,7 @@ const TaskList = () => {
     }
   }, [dispatch, taskStatus]);
 
-  const deleteTaskHandler = (e: {
-    target: { parentElement: { dataset: { id: string } } };
-  }) => {
-    const task_id = e.target.parentElement.dataset.id;
+  const deleteTaskHandler = (task_id: string) => {
     dispatch(deleteTask({ task_id }));
     setTimeout(() => {
       dispatch(resetTaskMessage());
@@ -80,6 +77,8 @@ const TaskList = () => {
             <TaskCreate
               handleCancel={toggleAddTaskVisible}
               action={addNewTask}
+              id={undefined}
+              subtask={false}
             />
           ) : (
             <ButtonAddTask onClick={toggleAddTaskVisible} title='Add task' />

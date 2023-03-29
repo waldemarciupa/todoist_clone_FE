@@ -51,7 +51,7 @@ const ProjectsList = ({
   const tasksNumber = useCallback(
     (project: IProject) => {
       const number = tasks.filter((task) => {
-        return task.project === project;
+        return task.project === project.name;
       }).length;
 
       return number ? number : null;
